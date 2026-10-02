@@ -29,27 +29,28 @@ int main(){
 	Automata A3 = createAF(); 
 	Automata A4 = createAF(); 
 	
-	str nombreArchivo1 = load2("Automata1 - comienzan con 'abb'.txt"); 
+	str nombreArchivo1 = load2("testing\\Automata1 - comienzan con 'abb'.txt"); 
 	loadAutomataFromTXT(&A1, nombreArchivo1);
 	
-	str nombreArchivo2 = load2("Automata2 - terminan con 'ab'.txt"); 
+	str nombreArchivo2 = load2("testing\\Automata2 - terminan con 'ab'.txt"); 
 	loadAutomataFromTXT(&A2, nombreArchivo2); 
 	
-	str nombreArchivo3 = load2("Automata3 - contiene 'aa' o 'bb'.txt");
+	str nombreArchivo3 = load2("testing\\Automata3 - contiene 'aa' o 'bb'.txt");
 	loadAutomataFromTXT(&A3, nombreArchivo3);
 	printAutomataFormal(A3);
 	
-	str nombreArchivo4 = load2("Automata4 - contiene 100 1011 111.txt");
+	str nombreArchivo4 = load2("testing\\Automata4 - contiene 100 1011 111.txt");
 	loadAutomataFromTXT(&A4, nombreArchivo4);
+	printAutomataFormal(A4);
 	
 	printf("\n----- CONVERSION AFND A AFD -----\n");
 	printf("Conversion AFND (automata 3): contiene 'aa' o 'bb'\n");
 	Automata AFD1 = conversionAFD(A3);
 	printAutomataFormal(AFD1);
 	
-	//printf("Conversion AFND (automata 4): contiene 100 1011 111\n");
+	printf("Conversion AFND (automata 4): contiene 100 1011 111\n");
 	Automata AFD2 = conversionAFD(A4);
-	//printAutomataFormal(AFD3);
+	printAutomataFormal(AFD2);
 	
 	do {
 		mostrarMenu();
@@ -168,7 +169,7 @@ int main(){
 		}
 		case 's':
 		case 'S':
-			printf("\n Saliendo del programa... ¡Exitos con la presentacion!\n");
+			printf("\n Saliendo del programa...\n");
 			break;
 			
 		default:
