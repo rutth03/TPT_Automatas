@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "TAD_AF.h"
 
-// ----- FUNCION CREACION DE AF -----
+/* FUNCION CREACION DE AF */
 Automata createAF(){
 	Automata A;
 	A.states = NULL;
@@ -12,7 +12,7 @@ Automata createAF(){
 	return A;
 }
 	
-// ----- MODULOS AUXILIARES DE CREACION -----
+/* MODULOS AUXILIARES DE CREACION */
 StateNode* findState(StateNode *states, str nombre){
 	while(states != NULL){
 		if(compararStr(states->name, nombre) == 0)
@@ -123,12 +123,12 @@ void loadStates(Automata *af, Tdata states){
 	Tdata coma = create_str_value(",");
 	Tdata listaEstados = split(data_element(states), coma); // ["q0,q1,q2,q3"] -> ["q0","q1","q2","q3"]
 	
-	// crear Nodos Estados vacios
+	// crear nodos estados vacios
 	StateNode *ultimo = NULL;
 	Tdata iter = data_first(listaEstados);
 	while(iter != NULL){
 		str nombreEstado = get_str_value(data_element(iter));
-		// Si el estado no existe todavia, lo agrego
+		// si el estado no existe todavia, lo agrego
 		if(findState(af->states, nombreEstado) == NULL){
 			StateNode *nuevo = malloc(sizeof(StateNode));
 			nuevo->name = load2(nombreEstado);
@@ -150,7 +150,7 @@ void loadStates(Automata *af, Tdata states){
 void loadFinalStates(Automata *af, Tdata finals){
 	Tdata coma = create_str_value(",");
 	
-	Tdata listaFinales = split(data_element(finals), coma); // ["q3"]
+	Tdata listaFinales = split(data_element(finals), coma); 
 	
 	Tdata iter = data_first(listaFinales);
 	while(iter != NULL){
@@ -175,7 +175,8 @@ void loadFinalStates(Automata *af, Tdata finals){
 		iter = data_next(iter);
 	}
 }
-// ----- FUNCIONES DE CARGA DE AUTOMATA -----
+	
+/* FUNCIONES DE CARGA DE AUTOMATA */
 void loadAutomataFields(Automata *af,
 						Tdata deterministic,
 						Tdata states,
@@ -268,7 +269,7 @@ void loadAutomataFromTXT(Automata *af, str nombreArchivo){
 					   );
 }
 
-// ----- MODULOS PARA RECUPERAR Q,F,qo,Sigma -----
+/* MODULOS PARA RECUPERAR Q,F,qo,Sigma */
 Tdata Rec_sigma(Automata af){
 	Tdata Sigma = NULL;
 	StateNode *auxEstado = af.states; 
@@ -295,7 +296,7 @@ Tdata Rec_Q(Automata af) {
 	while (aux != NULL) {
 		Tdata nombre = create_str_value(aux->name);
 		
-		insert_set(&Q, nombre); // insert_set ya clono el contenido internamente
+		insert_set(&Q, nombre); 
 		aux = aux->next;
 	}
 	return Q;
@@ -314,7 +315,7 @@ Tdata Rec_F(Automata af){
 	return F;
 }
 
-// ----- FUNCIONES DE MUESTRA -----
+/* FUNCIONES DE MUESTRA */
 void printDestinations(Tdata destinos){
 	if(destinos == NULL){
 		printf("{}");
@@ -417,7 +418,7 @@ void printAutomataFormal(Automata af){
 	printf("=================================\n");
 }
 	
-// ----- FUNCION DE CONVERSION AFND A AFD -----
+/* FUNCION DE CONVERSION AFND A AFD */
 StateNode *agregarEstado(StateNode **estados, str nombre_estado){
 	StateNode *nuevo = (StateNode*)malloc(sizeof(StateNode));
 	
@@ -469,7 +470,7 @@ Automata renombrarEstados(Automata AFD){
 	Automata nuevo = createAF();
 	nuevo.deterministic = AFD.deterministic;
 	
-	// PRIMER RECORRIDO: Crear p0, p1, p2, ... y copiar finales
+	// primer recorrido: crear p0, p1, p2, ... y copiar finales
 	StateNode *viejo = AFD.states;
 	int i = 0;
 	
@@ -482,27 +483,27 @@ Automata renombrarEstados(Automata AFD){
 		i++;
 	}
 	
-	// Estado inicial 
+	// estado inicial 
 	nuevo.q0 = obtenerNombreNuevo(AFD.states, AFD.q0);
 	
-	// SEGUNDO RECORRIDO: Copiar transiciones 
+	// segundo recorrido: copiar transiciones 
 	viejo = AFD.states;
 	
 	while(viejo != NULL){
-		// Obtener el estado origen renombrado 
+		// obtener el estado origen renombrado 
 		str origenNuevoNombre = obtenerNombreNuevo(AFD.states, viejo->name);
 		StateNode *origenNuevo = findState(nuevo.states, origenNuevoNombre);
 		Transition *t = viejo->transitions;
 		
 		while(t != NULL){
-			// Buscar cu�l es el estado destino viejo usando el conjunto almacenado en t->to 
+			// buscar cual es el estado destino viejo usando el conjunto almacenado en t->to 
 			StateNode *destinoViejo = findSubsetState(AFD.states, t->to);
 			
 			if(destinoViejo != NULL){
-				// Obtener su nuevo nombre 
+				// obtener su nuevo nombre 
 				str destinoNuevoNombre = obtenerNombreNuevo(AFD.states, destinoViejo->name);
 				
-				// Crear {pX} 
+				// crear {pX} 
 				Tdata destino = NULL;
 				Tdata dato = create_str_value(destinoNuevoNombre);
 				insert_set(&destino, dato);
@@ -531,13 +532,13 @@ int contieneFinal(Tdata subconjunto, Automata AFND){
 	return 0;
 }
 Automata conversionAFD(Automata AFND){
-	// 1.verifica que el automata ingresado sea NO determinista
+	// verifica que el automata ingresado sea NO determinista
 	if(AFND.deterministic){
 		printf("ERROR: el automata ya es determinista\n");
 		return AFND;
 	}
 	
-	// 2.crea automata vacio y lo define como determinista
+	// crea automata vacio y lo define como determinista
 	Automata AFD = createAF();
 	AFD.deterministic = 1;
 	
@@ -605,24 +606,24 @@ Automata conversionAFD(Automata AFND){
 	printAutomata(AFD);
 	return renombrarEstados(AFD);
 }
-// ----- FUNCION AUXILIAR DE VALIDACION -----
-// Dado un conjunto de estados actuales y un s�mbolo, devuelve el conjunto de todos los estados destinos posibles
+	
+/*  FUNCIONES DE VALIDACION */
 Tdata transicionConjunto(Automata af, Tdata estadosActuales, str simbolo) {
-	Tdata proximosEstados = NULL; // Conjunto vac�o {}
+	Tdata proximosEstados = NULL; // Conjunto vacio {}
 	
 	Tdata auxEstado = data_first(estadosActuales);
 	while (auxEstado != NULL) {
-		// Buscamos el nodo del estado en la estructura del aut�mata
+		// buscamos el nodo del estado en la estructura del automata
 		StateNode *encontrado = findState(af.states, get_str_value(data_element(auxEstado)));
 		if (encontrado != NULL) {
 			Transition *t = encontrado->transitions;
-			// Recorremos las transiciones del estado buscando el s�mbolo
+			// recorremos las transiciones del estado buscando el simbolo
 			while (t != NULL) {
 				if (compararStr(t->symbol, simbolo) == 0) {
 					// t->to contiene un conjunto de estados destinos (Tdata tipo SET)
 					Tdata auxDestino = data_first(t->to);
 					while (auxDestino != NULL) {
-						// Insertamos en el nuevo conjunto (insert_set evita duplicados)
+						// insertamos en el nuevo conjunto (insert_set evita duplicados)
 						insert_set(&proximosEstados, data_element(auxDestino));
 						auxDestino = data_next(auxDestino);
 					}
@@ -635,44 +636,42 @@ Tdata transicionConjunto(Automata af, Tdata estadosActuales, str simbolo) {
 	return proximosEstados;
 }
 
-// ----- FUNCION PRINCIPAL DE VALIDACION -----
 int validarCadena(Automata af, str cadena) {
-	// 1. Inicializar el conjunto de estados actuales con el estado inicial q0
+	// inicializar el conjunto de estados actuales con el estado inicial q0
 	Tdata estadosActuales = NULL;
 	Tdata aux;
 	Tdata q0_data = create_str_value(af.q0);
 	insert_set(&estadosActuales, q0_data);
 	
-	// 2. Procesar la cadena car�cter por car�cter
+	// procesar la cadena caracter por caracter
 	int i = 0;
 	while (cadena[i] != '\0') {
-		// Convertimos el car�cter actual en un str (string de de longitud 1)
+		// convertimos el caracter actual en un str (string de de longitud 1)
 		char charStr[2];
 		charStr[0] = cadena[i];
 		charStr[1] = '\0';
 		
-		// Obtenemos el siguiente conjunto de estados
+		// obtenemos el siguiente conjunto de estados
 		Tdata proximos = transicionConjunto(af, estadosActuales, charStr);
 		
-		// Liberar el conjunto anterior 
-		// por simplicidad aqu� pisamos la referencia de control)
+		// liberar el conjunto anterior, por simplicidad aqui pisamos la referencia de control
 		estadosActuales = proximos;
 		
-		// Si nos quedamos sin estados posibles a mitad de camino, la cadena se rechaza
+		// si nos quedamos sin estados posibles a mitad de camino, la cadena se rechaza
 		if (estadosActuales == NULL) {
 			return 0; 
 		}
 		i++;
 	}
 	aux=data_first(estadosActuales);
-	// 3. Verificar si alguno de los estados finales alcanzados es de aceptaci�n (isFinal)
+	
+	// verificar si alguno de los estados finales alcanzados es de aceptacion (isFinal)
 	while (aux != NULL) {
 		StateNode *est = findState(af.states, get_str_value(data_element(aux)));
 		if (est != NULL && est->isFinal) {
-			return 1; // Cadena aceptada
+			return 1; // cadena aceptada
 		}
 		aux = data_next(aux);
 	}
-	
-	return 0; // Ning�n estado alcanzado era final
+	return 0; // ningun estado alcanzado era final
 }
