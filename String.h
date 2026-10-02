@@ -4,6 +4,7 @@
 typedef char* str;
 
 str load2(const char*);
+void free_str(str s);
 void print_string(str );
 int compararStr(str, str);
 int longitudStr(str);

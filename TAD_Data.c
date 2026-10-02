@@ -13,7 +13,7 @@ struct dataType{
 	};
 };
 
-/* FUNCIONES DE CREACI�N */
+/* FUNCIONES DE CREACION */
 Tdata create_str_ast(){
 	Tdata n = (Tdata)malloc(sizeof(struct dataType));
 	n->nodeType = STR;
@@ -28,7 +28,7 @@ Tdata create_str_value(str value){
 void set_str_value(Tdata elem, str value){
 	if(elem == NULL || elem->nodeType != STR) return;
 	str copy = value == NULL ? NULL : load2(value);
-	free(elem->string);
+	free_str(elem->string);
 	elem->string = copy;
 }
 str get_str_value(Tdata elem){
@@ -79,7 +79,7 @@ Tdata clone(Tdata n) {
 	Tdata nuevo = NULL;
 	if (n->nodeType == STR) {
 		nuevo = create_str_ast();
-		if (n->string) nuevo->string = load2(n->string);
+		if (n->string) set_str_value(nuevo, n->string);
 	} 
 	else if (n->nodeType == SET || n->nodeType == LIST) {
 		Tdata aux = n;
@@ -312,6 +312,7 @@ void remove_set(Tdata* set, Tdata elem){
 		act = act->next;
 	}
 }
+	
 /* FUNCIONES DE CONVERSION */
 Tdata strToList(Tdata s){
 	if (s == NULL || s->nodeType != STR || s->string == NULL)
@@ -319,17 +320,16 @@ Tdata strToList(Tdata s){
 	
 	Tdata lista = NULL;
 	
-	char *cad = s->string;
+	str cad = s->string;
 	int i = 0;
 	
 	while (cad[i] != '\0') {
-		// crear string de 1 caracter
 		char aux[2];
 		aux[0] = cad[i];
 		aux[1] = '\0';
 		
 		Tdata nuevo = create_str_ast();
-		nuevo->string = load2(aux);
+		set_str_value(nuevo, aux);
 		
 		append_list(&lista, nuevo);
 		i++;
@@ -349,11 +349,9 @@ Tdata listToStr(Tdata L){
 		aux = aux->next;
 	}
 	
-	// reservar string final
 	char *buffer = (char*)malloc(len + 1);
 	buffer[0] = '\0';
 	
-	// concatenar
 	aux = L;
 	while (aux != NULL) {
 		if (aux->data != NULL && aux->data->nodeType == STR) {
@@ -390,18 +388,19 @@ Tdata split(Tdata texto, Tdata sep){
 		
 		append_list(&lista, nodo);
 		
-		free(actual);
+		free_str(actual);
 		actual = siguiente;
 	}
 	
 	Tdata ultimo = create_str_ast();
-	ultimo->string = load2(actual);;
+	set_str_value(ultimo, actual);
 	
 	append_list(&lista, ultimo);
-	free(actual);
+	free_str(actual);
 	
 	return lista;
 }
+	
 /* FUNCIONES DE MUESTRA */
 void printStr(Tdata x){
 	if(x != NULL && x->nodeType == STR)
@@ -489,7 +488,6 @@ Tdata setToStr(Tdata S){
 		buffer[0] = '\0';
 	}
 	else {
-		// reservar string final
 		buffer = (char*)malloc(len + 1 + contcomas);
 		buffer[0] = '\0';
 	}

@@ -9,7 +9,7 @@
 
 typedef struct dataType* Tdata;
 
-/* FUNCIONES DE CREACI�N */
+/* FUNCIONES DE CREACION */
 Tdata create_str_ast();
 Tdata create_str_value(str value);
 Tdata create_list();
@@ -46,7 +46,7 @@ int subset(Tdata, Tdata);
 int equals_set(Tdata, Tdata);
 void remove_set(Tdata*, Tdata);
 
-/* FUNCIONES DE CONVERSI�N */
+/* FUNCIONES DE CONVERSION */
 Tdata listToStr(Tdata);
 Tdata strToList(Tdata);
 Tdata listToSet(Tdata);

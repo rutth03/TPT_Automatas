@@ -15,7 +15,7 @@ tab_width=4
 tab_use_spaces=0
 explorer_path=.
 inherits_from=
-current_source=TAD_Data.h
+current_source=String.h
 path_char=\
 [source]
 path=String.c
@@ -23,7 +23,7 @@ cursor=31:1
 open=true
 [source]
 path=TAD_Data.c
-cursor=399:1
+cursor=325:25
 open=true
 [source]
 path=main.c
@@ -31,7 +31,7 @@ cursor=7:20
 open=true
 [source]
 path=TAD_AF.c
-cursor=475:0
+cursor=125:17
 open=true
 [header]
 path=String.h
@@ -39,11 +39,11 @@ cursor=12:0
 open=true
 [header]
 path=TAD_Data.h
-cursor=55:0
+cursor=46:31
 open=true
 [header]
 path=TAD_AF.h
-cursor=27:0
+cursor=6:19
 open=true
 [config]
 name=Debug

@@ -9,6 +9,9 @@ str load2(const char* s){
 	strcpy(r, s);
 	return r;
 }
+void free_str(str s){
+	free(s);
+}
 void print_string(str s){
 	printf("%s", s);
 }
