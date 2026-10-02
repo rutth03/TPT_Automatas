@@ -26,3 +26,10 @@ Puedes compilar el proyecto utilizando `gcc` desde la terminal:
 
 ```bash
 gcc -o simulador main.c TAD_AF.c TAD_Data.c String.c
+```
+
+## 🛠️ Estructura Interna en Memoria (Ejemplo)
+
+El autómata se representa mediante una estructura multilista dinámica, compuesta por una lista principal de estados (`stateNode`) y sublistas enlazadas para sus transiciones (`transition`).
+
+![Representación de la multilista del TAD Automata](img/Ejemplo-Estructura.svg)
